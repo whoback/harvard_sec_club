@@ -11,15 +11,21 @@ function get_top_50_websites {
     done
 }
 
-USAGE="Usage: $0 -f FILE or -g to generate hostname info for top 50 websites"
+USAGE="Usage: $0 [-f <FILE>] [-g]
+
+  -f,           output hostname information from file
+  -g,           will generate hostname information from alexa.com top 50 list"
 
 if [ "$#" == "0" ]; then
 	echo "$USAGE"
 	exit 1
 fi
 
-while getopts ":f:" opt; do
+while getopts ":f:g" opt; do
   case ${opt} in
+    g )
+      get_top_50_websites
+      ;;
     f )
       tar=$OPTARG
       cat $tar | while read line; do host $line; done
@@ -33,7 +39,3 @@ while getopts ":f:" opt; do
   esac
 done
 shift $((OPTIND -1))
-
-# grep for website
-# cat alexa.txt | grep something like (?<=\/siteinfo\/).*?(?=")
-# need to Write a bash script that takes a file of hostnames as input and resolves them to IP addresses using the 'host' or 'nslookup' commands
